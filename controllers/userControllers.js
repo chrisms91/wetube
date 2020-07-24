@@ -1,6 +1,6 @@
 import routes from '../routes';
 
-/* JOIN */
+// Join
 export const getJoin = (req, res) => {
   res.render('join', { pageTitle: 'Join' });
 };
@@ -20,7 +20,7 @@ export const postJoin = (req, res) => {
   res.render('join', { pageTitle: 'Join' });
 };
 
-/* LOGIN */
+// Login
 export const getLogin = (req, res) => {
   res.render('login', { pageTitle: 'Login' });
 };
