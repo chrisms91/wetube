@@ -2,9 +2,11 @@ doctype html
 html
   head
     title #{pageTitle} | #{siteName}
+    link(rel="stylesheet", href="/static/styles.css")
   body
     include ../partials/header
     main
       block content
       script(src="https://kit.fontawesome.com/aa6304a8b9.js" crossorigin="anonymous")
     include ../partials/footer
+    script(src="/static/main.js")
