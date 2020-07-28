@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
-const VideoSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+const VideoSchema = new Schema({
   fileUrl: {
     type: String,
     required: 'File URL is required',
@@ -20,7 +21,7 @@ const VideoSchema = new mongoose.Schema({
   },
   comments: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Comment',
     },
   ],
