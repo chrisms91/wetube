@@ -2,7 +2,6 @@ import express from 'express';
 import routes from '../routes';
 import {
   userDetail,
-  getMe,
   getEditProfile,
   postEditProfile,
   getChangePassword,
@@ -19,6 +18,5 @@ userRouter.get(routes.changePassword, onlyPrivate, getChangePassword);
 userRouter.post(routes.changePassword, onlyPrivate, postChangePassword);
 
 userRouter.get(routes.userDetail(), userDetail);
-userRouter.get(routes.me, getMe);
 
 export default userRouter;

@@ -8,6 +8,18 @@ const UserSchema = new Schema({
   avatarUrl: String,
   facebookId: Number,
   githubId: Number,
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
+  videos: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Video',
+    },
+  ],
 });
 
 // using passport js plugin
