@@ -1,5 +1,6 @@
 import routes from '../routes';
 import Video from '../models/Video';
+import Comment from '../models/Comment';
 
 export const home = async (req, res) => {
   try {
@@ -58,7 +59,12 @@ export const videoDetail = async (req, res) => {
     params: { id },
   } = req;
   try {
-    const video = await Video.findById(id).populate('creator');
+    const video = await Video.findById(id)
+      .populate('creator')
+      .populate('comments');
+    console.log('from videoDetail');
+    // console.log(typeof video.comments[0].creator);
+    // console.log(video.creator.id);
     res.render('videoDetail', { pageTitle: video.title, video });
   } catch (error) {
     console.log(error);
@@ -74,8 +80,8 @@ export const getEditVideo = async (req, res) => {
   } = req;
   try {
     const video = await Video.findById(id);
-    if (video.creator !== req.user.id) {
-      throw Error();
+    if (video.creator.toString() !== req.user.id) {
+      throw Error('video.creator !== req.user.id');
     } else {
       res.render('editVideo', { pageTitle: `Edit ${video.title}`, video });
     }
@@ -130,6 +136,51 @@ export const postRegisterView = async (req, res) => {
     video.save();
     res.status(200);
   } catch (error) {
+    res.status(400);
+  } finally {
+    res.end();
+  }
+};
+
+// Add Comment
+
+export const postAddComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { comment },
+    user,
+  } = req;
+  try {
+    const video = await Video.findById(id);
+    const newComment = await Comment.create({
+      text: comment,
+      creator: user.id,
+    });
+    video.comments.push(newComment.id);
+    video.save();
+    res.status(200).send({ commentId: newComment.id });
+  } catch (error) {
+    res.status(400);
+  } finally {
+    res.end();
+  }
+};
+
+export const deleteComment = async (req, res) => {
+  const {
+    params: { id: videoId, commentId },
+  } = req;
+  try {
+    console.log(`videoId: ${videoId}`);
+    console.log(`commentId: ${commentId}`);
+
+    const vid = await Video.findById(videoId).populate('comments');
+    console.log(vid);
+    vid.comments = vid.comments.filter((comment) => comment.id !== commentId);
+    vid.save();
+    await Comment.findOneAndRemove({ _id: commentId });
+  } catch (error) {
+    console.log(error);
     res.status(400);
   } finally {
     res.end();
